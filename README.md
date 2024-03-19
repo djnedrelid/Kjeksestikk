@@ -1,7 +1,7 @@
 ﻿## Kjeksestikk - A basic DLL injector  
 
 Et eldre prosjekt fra 2019 jeg hadde liggende og legger ut i tilfelle det er av interesse for noen. Opprinnelig informasjon på engelsk følger.  
----
+***
 
 Kjeksestikk is a basic (CreateRemoteThread/LoadLibrary w/allocated path buffer) DLL injector.  
 Kjeksestikk was created during the experimentation and learning of manipulating processes internally.  
