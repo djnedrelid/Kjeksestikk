@@ -17,6 +17,10 @@ namespace Kjeksestikk
 			[MarshalAs(UnmanagedType.LPWStr)] String FullDllPath,
 			[MarshalAs(UnmanagedType.LPWStr)] String ProcessName
 		);
+
+		[DllImport("kernel32.dll")]
+		[return: MarshalAs(UnmanagedType.Bool)]
+		static extern bool IsWow64Process(IntPtr hProcess, out bool lpSystemInfo);
 	
 		string ValgtKjeks = "";
 
@@ -34,6 +38,25 @@ namespace Kjeksestikk
 			);
 		}
 	
+		private bool Is64BitProcess(Process p)
+		{
+			bool is64Bit = false;
+
+			// Default to 32-bit if unable to detect
+			try
+			{
+				// 64-bit process running on 64-bit OS
+				if (IntPtr.Size == 8) 
+					is64Bit = true;
+
+				else if (IsWow64Process(p.Handle, out bool wow64))
+					is64Bit = !wow64; // If the process is not WOW64, it's 64-bit
+
+			} catch {}
+
+			return is64Bit;
+		}
+
 		private void LoadProcesses()
 		{
 			Process[] pArr = Process.GetProcesses().OrderBy(p => p.ProcessName).ToArray();
@@ -47,12 +70,13 @@ namespace Kjeksestikk
 				)
 					continue;
 
-				lstProsesser.Items.Add(
-					new KeyValuePair<string,int>(
-						p.ProcessName,
-						p.Id
-					)
-				);
+				if (!Is64BitProcess(p)) 
+					lstProsesser.Items.Add(
+						new KeyValuePair<string,int>(
+							p.ProcessName,
+							p.Id
+						)
+					);
 			}
 
 			Status("Prosesser lagt til liste.");

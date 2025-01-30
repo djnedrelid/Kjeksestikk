@@ -104,7 +104,7 @@
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximizeBox = false;
 			this.Name = "Form1";
-			this.Text = "Kjeksestikk32 - Thronic DLL Injector";
+			this.Text = "Kjeksestikk64 - Thronic DLL Injector";
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
