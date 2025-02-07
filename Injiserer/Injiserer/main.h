@@ -281,7 +281,7 @@ extern "C" __declspec(dllexport) bool Injiser(const wchar_t* FullDllPath, const 
 
 	// Create a thread on the load library function address, 
 	// and use the file path that we allocated as parameter.
-	HANDLE hThread = CreateRemoteThread(__HandleProcess, nullptr, 0, LPTHREAD_START_ROUTINE(LoadLibraryW), (void*)pAllocFilePathAddr, 0, nullptr); 	
+	HANDLE hThread = CreateRemoteThread(__HandleProcess, nullptr, 0, (LPTHREAD_START_ROUTINE)LoadLibraryW, (void*)pAllocFilePathAddr, 0, nullptr); 	
 	if (hThread == nullptr) {
 		GetError("CreateRemoteThread feilet.");
 		VirtualFreeEx(__HandleProcess, (void*)pAllocFilePathAddr, AllocSize, MEM_RELEASE);
