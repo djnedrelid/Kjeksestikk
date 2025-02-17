@@ -275,7 +275,7 @@ extern "C" __declspec(dllexport) bool Injiser(const wchar_t* FullDllPath, const 
 	// Write the file path into memory.
 	if (WriteProcessMemory(__HandleProcess, (void*)pAllocFilePathAddr, FullDllPath, AllocSize, 0) == 0) {
 		GetError("WriteProcessMemory feilet.");
-		VirtualFreeEx(__HandleProcess, (void*)pAllocFilePathAddr, AllocSize, MEM_RELEASE);
+		VirtualFreeEx(__HandleProcess, (void*)pAllocFilePathAddr, 0, MEM_RELEASE);
 		return false;
 	}
 
@@ -284,7 +284,7 @@ extern "C" __declspec(dllexport) bool Injiser(const wchar_t* FullDllPath, const 
 	HANDLE hThread = CreateRemoteThread(__HandleProcess, nullptr, 0, (LPTHREAD_START_ROUTINE)LoadLibraryW, (void*)pAllocFilePathAddr, 0, nullptr); 	
 	if (hThread == nullptr) {
 		GetError("CreateRemoteThread feilet.");
-		VirtualFreeEx(__HandleProcess, (void*)pAllocFilePathAddr, AllocSize, MEM_RELEASE);
+		VirtualFreeEx(__HandleProcess, (void*)pAllocFilePathAddr, 0, MEM_RELEASE);
 		return false;
 	}
 
@@ -296,12 +296,12 @@ extern "C" __declspec(dllexport) bool Injiser(const wchar_t* FullDllPath, const 
 	if (dwExitCode == 0) {
 		GetError("Injeksjon feilet, LoadLibraryA returnerte 0.");
 		CloseHandle(hThread);
-		VirtualFreeEx(__HandleProcess, (void*)pAllocFilePathAddr, AllocSize, MEM_RELEASE);
+		VirtualFreeEx(__HandleProcess, (void*)pAllocFilePathAddr, 0, MEM_RELEASE);
 		return false;
 	}
 
 	// Clean up to avoid memory leak.
-	VirtualFreeEx(__HandleProcess, (void*)pAllocFilePathAddr, AllocSize, MEM_RELEASE);
+	VirtualFreeEx(__HandleProcess, (void*)pAllocFilePathAddr, 0, MEM_RELEASE);
 	CloseHandle(hThread);
 
 	// Operations successful. 
